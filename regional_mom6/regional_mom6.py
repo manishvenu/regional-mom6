@@ -1416,7 +1416,7 @@ class experiment:
         print(
             "OUTPUT FROM MAKE SOLO MOSAIC:",
             subprocess.run(
-                str(self.toolpath_dir / "make_solo_mosaic/make_solo_mosaic")
+                str(self.toolpath_dir / "make_solo_mosaic")
                 + " --num_tiles 1 --dir . --mosaic_name ocean_mosaic --tile_file hgrid.nc",
                 shell=True,
                 cwd=self.mom_input_dir,
@@ -1427,7 +1427,7 @@ class experiment:
         print(
             "OUTPUT FROM QUICK MOSAIC:",
             subprocess.run(
-                str(self.toolpath_dir / "make_quick_mosaic/make_quick_mosaic")
+                str(self.toolpath_dir / "make_quick_mosaic")
                 + " --input_mosaic ocean_mosaic.nc --mosaic_name grid_spec --ocean_topog bathymetry.nc",
                 shell=True,
                 cwd=self.mom_input_dir,
@@ -1447,7 +1447,7 @@ class experiment:
         print(
             "OUTPUT FROM CHECK MASK:\n\n",
             subprocess.run(
-                str(self.toolpath_dir / "check_mask/check_mask")
+                str(self.toolpath_dir / "check_mask")
                 + f" --grid_file ocean_mosaic.nc --ocean_topog bathymetry.nc --layout {layout[0]},{layout[1]} --halo 4",
                 shell=True,
                 cwd=self.mom_input_dir,
@@ -1657,7 +1657,7 @@ class experiment:
             era5_path (str): Path to the ERA5 forcing files. Specifically, the single-level
                 reanalysis product. For example, ``'SOMEPATH/era5/single-levels/reanalysis'``
         """
-
+        print("Sup2")
         ## Firstly just open all raw data
         rawdata = {}
         for fname, vname in zip(
@@ -1669,20 +1669,21 @@ class experiment:
                 i for i in range(self.date_range[0].year, self.date_range[1].year + 1)
             ]
             # construct a list of all paths for all years to use for open_mfdataset
-            paths_per_year = [Path(f"{era5_path}/{fname}/{year}/") for year in years]
-            all_files = []
+            # paths_per_year = [Path(f"{era5_path}/{fname}/{year}/") for year in years]
+            paths_per_year = []
+            all_files = [os.path.join(era5_path,"era5.nc")]
             for path in paths_per_year:
                 # Use glob to find all files that match the pattern
                 files = list(path.glob(f"{fname}*.nc"))
                 # Add the files to the all_files list
                 all_files.extend(files)
+            print(all_files)
 
             ds = xr.open_mfdataset(
                 all_files,
                 decode_times=False,
                 chunks={"longitude": 100, "latitude": 100},
             )
-
             ## Cut out this variable to our domain size
             rawdata[fname] = longitude_slicer(
                 ds,
@@ -2156,7 +2157,6 @@ class segment:
         # If repeat-year forcing, add modulo coordinate
         if self.repeat_year_forcing:
             segment_out["time"] = segment_out["time"].assign_attrs({"modulo": " "})
-
         with ProgressBar():
             segment_out.load().to_netcdf(
                 self.outfolder / f"forcing/forcing_obc_{self.segment_name}.nc",
