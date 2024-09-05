@@ -562,7 +562,6 @@ class experiment:
             )
             if nx % 2 != 1:
                 nx += 1
-
             λ = np.linspace(
                 self.longitude_extent[0], self.longitude_extent[1], nx
             )  # longitudes in degrees
@@ -1517,7 +1516,7 @@ class experiment:
         print(
             "OUTPUT FROM MAKE SOLO MOSAIC:",
             subprocess.run(
-                str(self.toolpath_dir / "make_solo_mosaic/make_solo_mosaic")
+                str(self.toolpath_dir / "make_solo_mosaic")
                 + " --num_tiles 1 --dir . --mosaic_name ocean_mosaic --tile_file hgrid.nc",
                 shell=True,
                 cwd=self.mom_input_dir,
@@ -1528,7 +1527,7 @@ class experiment:
         print(
             "OUTPUT FROM QUICK MOSAIC:",
             subprocess.run(
-                str(self.toolpath_dir / "make_quick_mosaic/make_quick_mosaic")
+                str(self.toolpath_dir / "make_quick_mosaic")
                 + " --input_mosaic ocean_mosaic.nc --mosaic_name grid_spec --ocean_topog bathymetry.nc",
                 shell=True,
                 cwd=self.mom_input_dir,
@@ -1548,7 +1547,7 @@ class experiment:
         print(
             "OUTPUT FROM CHECK MASK:\n\n",
             subprocess.run(
-                str(self.toolpath_dir / "check_mask/check_mask")
+                str(self.toolpath_dir / "check_mask")
                 + f" --grid_file ocean_mosaic.nc --ocean_topog bathymetry.nc --layout {layout[0]},{layout[1]} --halo 4",
                 shell=True,
                 cwd=self.mom_input_dir,
