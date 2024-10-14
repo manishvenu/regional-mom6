@@ -685,9 +685,7 @@ class experiment:
         expt.longitude_extent = longitude_extent
         expt.ocean_mask = None
         expt.layout = None
-        self.segments = (
-            {}
-        )
+        self.segments = {}
         return expt
 
     def __init__(
@@ -2176,7 +2174,7 @@ class experiment:
         overwrite=False,
         with_tides=False,
         boundaries=["south", "north", "west", "east"],
-        premade_rundir_path_arg =  None
+        premade_rundir_path_arg=None,
     ):
         """
         Set up the run directory for MOM6. Either copy a pre-made set of files, or modify
@@ -2424,8 +2422,12 @@ class experiment:
                     MOM_override_dict[key_DATA]["value"] + '"'
                 )
         if type(self.date_range[0]) == str:
-            self.date_range[0] = dt.datetime.strptime(self.date_range[0],"%Y-%m-%d %H:%M:%S")
-            self.date_range[1] = dt.datetime.strptime(self.date_range[1],"%Y-%m-%d %H:%M:%S")
+            self.date_range[0] = dt.datetime.strptime(
+                self.date_range[0], "%Y-%m-%d %H:%M:%S"
+            )
+            self.date_range[1] = dt.datetime.strptime(
+                self.date_range[1], "%Y-%m-%d %H:%M:%S"
+            )
         # Tides OBC adjustments
         if with_tides:
 
