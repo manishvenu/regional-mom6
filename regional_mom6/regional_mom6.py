@@ -2174,7 +2174,7 @@ class experiment:
         using_payu=False,
         overwrite=False,
         with_tides=False,
-        boundaries=["south", "north", "west", "east"]
+        boundaries=["south", "north", "west", "east"],
     ):
         """
         Set up the run directory for MOM6. Either copy a pre-made set of files, or modify
