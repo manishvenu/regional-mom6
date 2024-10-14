@@ -25,6 +25,7 @@ from pathlib import Path
 import glob
 from collections import defaultdict
 import json
+import copy 
 
 warnings.filterwarnings("ignore")
 
@@ -2569,9 +2570,9 @@ class experiment:
             lines = file.readlines()
 
             # Set the default initialization for a new key
-            MOM_file_dict = defaultdict(lambda: default_layout.copy())
+            MOM_file_dict = defaultdict(lambda: copy.deepcopy(default_layout))
             MOM_file_dict["filename"] = filename
-            dlc = default_layout.copy()
+            dlc = copy.deepcopy(default_layout)
             for jj in range(len(lines)):
                 if "=" in lines[jj] and not "===" in lines[jj]:
                     split = lines[jj].split("=", 1)
@@ -2590,10 +2591,10 @@ class experiment:
                         dlc["value"] = str(value.strip())
                         dlc["comment"] = None
 
-                    MOM_file_dict[var.strip()] = dlc.copy()
+                    MOM_file_dict[var.strip()] = copy.deepcopy(dlc)
 
             # Save a copy of the original dictionary
-            MOM_file_dict["original"] = MOM_file_dict.copy()
+            MOM_file_dict["original"] = copy.deepcopy(MOM_file_dict)
         return MOM_file_dict
 
     def write_MOM_file(self, MOM_file_dict):
@@ -2607,6 +2608,9 @@ class experiment:
             for jj in range(len(lines)):
                 if "=" in lines[jj] and not "===" in lines[jj]:
                     var = lines[jj].split("=", 1)[0].strip()
+                    if "#override" in var:
+                            var = var.replace("#override", "")
+                            var = var.strip()                    
                     if var in MOM_file_dict.keys() and (
                         str(MOM_file_dict[var]["value"])
                     ) != str(original_MOM_file_dict[var]["value"]):
