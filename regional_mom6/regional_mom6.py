@@ -25,7 +25,7 @@ from pathlib import Path
 import glob
 from collections import defaultdict
 import json
-import copy 
+import copy
 
 warnings.filterwarnings("ignore")
 
@@ -2609,8 +2609,8 @@ class experiment:
                 if "=" in lines[jj] and not "===" in lines[jj]:
                     var = lines[jj].split("=", 1)[0].strip()
                     if "#override" in var:
-                            var = var.replace("#override", "")
-                            var = var.strip()                    
+                        var = var.replace("#override", "")
+                        var = var.strip()
                     if var in MOM_file_dict.keys() and (
                         str(MOM_file_dict[var]["value"])
                     ) != str(original_MOM_file_dict[var]["value"]):
