@@ -2531,7 +2531,7 @@ class experiment:
             if param_name in MOM_override_dict.keys():
                 original_val = MOM_override_dict[param_name]["value"]
                 print(
-                    "This parameter {} is begin replaced from {} to {} in MOM_override".format(
+                    "This parameter {} is being replaced from {} to {} in MOM_override".format(
                         param_name, original_val, param_value
                     )
                 )
